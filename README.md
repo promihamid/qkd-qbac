@@ -234,7 +234,7 @@ The optimization aims to:
 
 ---
 
-## 🏆 Contributions
+##  Contributions
 
 1. Extension of QCL-style attacks to an entanglement-based protocol with Eve on both arms, validated against Fuchs–Peres and PCCM.
 2. A 30-condition noise benchmark including Eve-side noise, with ceiling checks (arm-local vs joint).
@@ -243,7 +243,7 @@ The optimization aims to:
 
 ---
 
-## ⚠️ Limitations and Next Steps
+##  Limitations and Next Steps
 
 - Individual attacks, arm-local blocks, simulation only.
 - A joint (four-qubit) attack was tested at a single point (p = 0.2, f = 0.75). It beats the local ceiling in most scenarios (by up to 0.08), so a full joint benchmark remains open.
