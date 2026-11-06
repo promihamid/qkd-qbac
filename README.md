@@ -1,151 +1,177 @@
+
+
 # Entanglement-Based BBM92 Quantum Key Distribution: Comparative Analysis of Eavesdropping Attacks
 
-**Investigating PCCM, Quantum Circuit Learning (QCL), and Quantum-Based Attack Circuit (Q-BAC)**
+A quantum simulation-based research project investigating and comparing different individual eavesdropping attacks in the entanglement-based BBM92 Quantum Key Distribution (QKD) protocol.
 
-## Overview
+The project focuses on **two-arm eavesdropping**, where Eve attacks both quantum channels connecting the entangled-pair source to Alice and Bob. It explores the impact of these attacks on quantum correlations, information leakage, and the security of the shared key.
 
-This project investigates quantum eavesdropping attacks in **BBM92 (Bennett–Brassard–Mermin–1992)**, an entanglement-based Quantum Key Distribution (QKD) protocol.
+## 📌 Project Overview
 
-The project implements and compares three attack models:
+BBM92 is an entanglement-based Quantum Key Distribution protocol in which Alice and Bob receive two particles from a shared entangled pair. They independently measure their particles using randomly selected Z and X bases to establish correlated measurement outcomes and generate a shared secret key.
 
-- **PCCM** – Theoretical benchmark.
-- **QCL (Quantum Circuit Learning)** – A learnable quantum attack model.
-- **Q-BAC (Quantum-Based Attack Circuit)** – The proposed quantum attack architecture.
+This project investigates how an eavesdropper (Eve) can interact with both particles of the entangled pair to gain information about the quantum states.
 
-Using an entangled quantum system, the simulation studies how Eve's interaction with the communication channels affects the quantum states of Alice and Bob and the information accessible to Eve.
+Unlike approaches that consider attacks on only one side, this research investigates **both arms of the BBM92 protocol**:
 
-The main research objective is to investigate whether a learnable quantum attack architecture can achieve competitive performance compared with the theoretical PCCM benchmark under ideal, noise-free conditions.
+- **Alice's arm:** Eve attacks the quantum channel carrying the particle toward Alice.
+- **Bob's arm:** Eve attacks the quantum channel carrying the particle toward Bob.
 
-## Key Features
+The project compares different attack architectures to understand how interactions with both quantum channels affect Alice–Bob correlations and Eve's information gain.
 
-- **BBM92 Simulation:** Models entanglement-based quantum communication using Bell states.
-- **Quantum Entanglement:** Uses correlated quantum states to represent Alice and Bob's shared quantum system.
-- **Multiple Attack Models:** Implements and compares PCCM, QCL, and Q-BAC.
-- **Two-Ancilla Architecture:** Models Eve's interaction with both Alice's and Bob's quantum channels using two ancilla qubits.
-- **Quantum Circuit Learning:** Applies numerical optimization to investigate learnable attack circuits.
-- **Fidelity Evaluation:** Measures Alice–Bob and Alice–Eve fidelities.
-- **Benchmark Comparison:** Evaluates QCL and Q-BAC against the PCCM theoretical benchmark.
+## 🎯 Research Objectives
 
-## BBM92 Protocol
+- Investigate individual eavesdropping attacks on both arms of the entangled BBM92 protocol.
+- Compare conventional and learnable quantum cloning architectures.
+- Evaluate the trade-off between preserving Alice–Bob information and increasing Eve's information gain.
+- Analyze the effect of eavesdropping on entanglement and quantum correlations.
+- Examine Z- and X-basis measurement outcomes and their impact on protocol security.
+- Investigate whether learnable attack architectures can improve Eve's information gain under different noise conditions.
 
-BBM92 is an entanglement-based QKD protocol in which Alice and Bob share quantum particles generated as an entangled pair.
+## 🔬 BBM92 and Two-Arm Eavesdropping Architecture
 
-The simulation uses the Bell state:
+The simulation starts with an entangled Bell state:
 
 $$
-|\Phi^+\rangle = \frac{|00\rangle+|11\rangle}{\sqrt{2}}
+|\Phi^+\rangle_{AB} = \frac{|00\rangle + |11\rangle}{\sqrt{2}}
 $$
 
-Alice and Bob independently measure their respective qubits using two measurement bases:
+The two particles are distributed through separate quantum channels toward Alice and Bob.
 
-| Measurement Basis | Quantum States |
-|---|---|
-| Z-basis | $|0\rangle,\ |1\rangle$ |
-| X-basis | $|+\rangle,\ |-\rangle$ |
+Eve interacts with both channels, targeting the particles travelling toward Alice and Bob.
 
-After measurement, Alice and Bob compare their measurement bases through a public classical channel. They retain the results obtained using matching bases.
+### Attack Workflow
 
-These correlated measurement outcomes form the basis of their shared raw key.
+```mermaid
+flowchart TD
+    A["Entangled Bell Pair |Φ+⟩"] --> B["Two Quantum Channels"]
+    B --> C["Alice's Quantum Channel"]
+    B --> D["Bob's Quantum Channel"]
+    C --> E["Eve Attacks Alice's Arm"]
+    D --> F["Eve Attacks Bob's Arm"]
+    E --> G["Alice's Measurement"]
+    F --> H["Bob's Measurement"]
+    G --> I["Alice-Bob Correlation Analysis"]
+    H --> I
+    E --> J["Eve's Information"]
+    F --> J
+    J --> K["Eve's Information Gain"]
+    I --> L["Security Evaluation"]
+    K --> L
+```
 
-## Eavesdropping Attack Models
+## ⚛️ Eavesdropping Architectures
 
-### 1. PCCM
+This project investigates three quantum attack architectures.
 
-PCCM serves as the theoretical benchmark for evaluating eavesdropping performance. It provides a reference for comparing the learnable quantum attack models.
+### 1. Phase-Covariant Cloning Machine (PCCM)
+
+PCCM is used as a reference cloning architecture for evaluating the performance of the learnable quantum attack models.
 
 ### 2. Quantum Circuit Learning (QCL)
 
-QCL uses a parameterized quantum circuit with trainable parameters.
+QCL uses a trainable quantum circuit with rotation gates and entangling operations.
 
-Numerical optimization updates these parameters to investigate how a learnable quantum circuit can affect the quantum states of Bob and Eve and improve Eve's information extraction.
+The circuit includes:
+
+- RX, RY, and RZ rotation gates.
+- CNOT gates for entangling operations.
+- Trainable circuit parameters.
 
 ### 3. Quantum-Based Attack Circuit (Q-BAC)
 
-Q-BAC is the proposed quantum attack architecture investigated in this project.
+Q-BAC is a proposed learnable quantum attack architecture designed to investigate whether trainable quantum circuits can improve Eve's information gain.
 
-It uses **two ancilla qubits** to model Eve's interaction with both Alice's and Bob's quantum channels.
+The architecture uses:
 
-This architecture allows the simulation to investigate Eve's interaction with both sides of the entangled quantum system rather than considering only a single-channel interaction.
+- RY and RZ rotation gates.
+- Controlled-RY (CRY) and Controlled-RZ (CRZ) gates.
+- RX rotation gates.
+- CNOT gates for entangling operations.
 
-Q-BAC is evaluated against QCL and the theoretical PCCM benchmark.
+The performance of Q-BAC is compared with PCCM and QCL under different experimental conditions.
 
-## Quantum System Architecture
+## 📊 Evaluation Metrics
 
-The simulation represents an entangled quantum communication system involving:
+The attack architectures are evaluated using the following measurements:
 
-| Component | Description |
-|---|---|
-| Alice | Legitimate sender |
-| Bob | Legitimate receiver |
-| Eve | Potential eavesdropper |
-| Ancilla Qubit 1 | Additional quantum register used by Eve |
-| Ancilla Qubit 2 | Additional quantum register used by Eve |
+| Metric                         | Purpose                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| Alice–Bob Fidelity ((F\_{AB})) | Measures how well Bob preserves Alice's quantum information.             |
+| Alice–Eve Fidelity ((F\_{AE})) | Measures how accurately Eve can obtain Alice's quantum information.      |
+| QBER                           | Measures the quantum bit error rate between Alice and Bob.               |
+| Z-basis Fidelity               | Evaluates performance in the Z measurement basis.                        |
+| X-basis Fidelity               | Evaluates performance in the X measurement basis.                        |
+| Basis Correlation              | Examines the correlation between Alice's and Bob's measurement outcomes. |
+| Marginal Bias                  | Measures unwanted bias in measurement outcomes.                          |
 
-The system combines the entangled Alice–Bob state with Eve's two ancilla qubits. The attack models investigate how Eve's interactions affect the quantum states and the information available to the legitimate users and the eavesdropper.
+The main objective is to study the relationship between Alice–Bob information preservation and Eve's information gain.
 
-## Evaluation Metrics
+## ⚙️ Optimization Methodology
 
-The attack models are evaluated using quantum fidelity.
+Numerical optimization is used to train the learnable attack architectures.
 
-### Alice–Bob Fidelity ($F_{AB}$)
+The initial optimization objective is:
 
-Measures how closely Bob's quantum state matches Alice's reference state.
+$$
+\mathcal{L}_0 =
+10(F_{AB}-f_{\text{target}})^2-F_{AE}
+$$
 
-A higher $F_{AB}$ indicates better preservation of the legitimate communication state.
+A marginal-bias penalty is added to the objective:
 
-### Alice–Eve Fidelity ($F_{AE}$)
+$$
+\mathcal{L} =
+\mathcal{L}_0+1000P_{\text{bias}}
+$$
 
-Measures how closely Eve's reduced quantum state matches Alice's reference state.
+Where:
 
-A higher $F_{AE}$ indicates greater similarity between Eve's state and Alice's reference state.
+- $F_{AB}$ = Alice–Bob fidelity.
+- $F_{AE}$ = Alice–Eve fidelity.
+- $f_{\text{target}}$ = Target Alice–Bob fidelity.
+- $P_{\text{bias}}$ = Marginal-bias penalty.
 
-Both metrics are analyzed together to study the trade-off between legitimate communication quality and eavesdropping performance.
+The optimization aims to:
 
-## Numerical Optimization
+1. Keep Alice–Bob fidelity close to the selected target.
+2. Maximize Eve's information gain.
+3. Reduce unwanted measurement bias.
 
-The project evaluates the attack models across **10 target fidelity values** using numerical optimization.
+## 🧪 Experimental Settings
 
-The evaluation process involves:
+The project investigates different attack configurations under ideal and noisy simulation conditions.
 
-1. Constructing the quantum states and attack circuits.
-2. Applying Eve's interaction with the entangled communication system.
-3. Calculating the resulting quantum states.
-4. Evaluating Alice–Bob and Alice–Eve fidelities.
-5. Optimizing the attack circuit parameters.
-6. Comparing the resulting fidelity values across different attack models.
+### Ideal Experiments
 
-This allows the project to investigate how different target fidelity values affect the performance of the eavesdropping strategies.
+- Noise-free quantum circuit simulations.
+- Entangled Bell-state initialization.
+- Z- and X-basis measurements.
+- Comparative evaluation of PCCM, QCL, and Q-BAC.
 
-## Experimental Scope
+### Noisy Experiments
 
-The initial experiments focus on **ideal, noise-free quantum simulations**.
+- Density-matrix-based simulation.
+- Investigation of different attack scenarios.
+- Evaluation under different noise conditions.
+- Comparison of two-arm attacks with a Bob-only attack control.
 
-The main comparisons include:
+These experiments help investigate how noise and access to both quantum channels influence the information–disturbance trade-off.
 
-- PCCM vs. QCL
-- PCCM vs. Q-BAC
-- QCL vs. Q-BAC
-- Alice–Bob fidelity across different target fidelity values
-- Alice–Eve fidelity across different target fidelity values
+## 🛠️ Technologies Used
 
-The central research question is whether a learnable quantum attack architecture, particularly Q-BAC, can achieve competitive eavesdropping performance compared with the theoretical PCCM benchmark.
+- **Python** – Main programming language.
+- **NumPy** – Numerical operations and validation.
+- **SciPy** – Numerical optimization.
+- **Pandas** – Experimental data handling and analysis.
 
-## Technologies Used
+## 🔍 Research Scope
 
-- **Python** – Main programming language
-- **JAX** – Numerical computation and optimization
-- **NumPy** – Quantum state and matrix operations
-- **SciPy** – Numerical optimization
-- **Pandas** – Experimental data organization and analysis
+The main research question is whether learnable quantum attack architectures can provide an advantage over established cloning approaches when Eve has access to both arms of an entangled BBM92 system.
 
-## Research Objective
+The study evaluates the performance of Q-BAC and QCL against PCCM across different attack configurations and noise conditions.
 
-This project explores learnable quantum eavesdropping strategies in entanglement-based Quantum Key Distribution.
+The results are analyzed comparatively, without assuming that a learnable architecture is universally superior to the reference benchmark.
 
-By implementing and comparing PCCM, QCL, and Q-BAC within a common BBM92 simulation framework, the research investigates whether quantum circuit learning and interactions with both sides of an entangled communication system can provide advantages in Eve's information extraction.
 
-The PCCM benchmark provides a theoretical reference for evaluating the performance of the proposed Q-BAC architecture.
 
----
-
-**Research Areas:** Quantum Key Distribution · BBM92 · Quantum Cryptography · Quantum Circuit Learning · Quantum Eavesdropping · Quantum Entanglement · Quantum Fidelity
