@@ -144,40 +144,111 @@ The optimization aims to:
 2. Maximize Eve's information gain.
 3. Reduce unwanted measurement bias.
 
-## 🧪 Experimental Settings
+## 🧪 Noise Scenarios
 
-The project investigates different attack configurations under ideal and noisy simulation conditions.
+10 scenarios × 3 strengths (0.1 / 0.2 / 0.3) = **30 noise conditions**.
 
-### Ideal Experiments
+| ID | System | Noise / Attack Scenario |
+|---|---|---|
+| AB1 | Alice–Bob | Bob bit-flip, before Eve |
+| AB2 | Alice–Bob | Bob bit-flip, after Eve |
+| AB3 | Alice–Bob | Bob amplitude damping, before Eve |
+| AB4 | Alice–Bob | Alice bit-flip, before Eve |
+| AB5 | Alice–Bob | Both arms dephasing, after Eve |
+| AB6 | Alice–Bob | Werner source (depolarizing) |
+| EV1 | Eve | Ancilla bit-flip, before |
+| EV2 | Eve | Ancilla bit-flip, after |
+| EV3 | Eve | Ancilla amplitude damping, after |
+| EV4 | Eve | Ancilla dephasing, after |
 
-- Noise-free quantum circuit simulations.
-- Entangled Bell-state initialization.
-- Z- and X-basis measurements.
-- Comparative evaluation of PCCM, QCL, and Q-BAC.
+---
 
-### Noisy Experiments
+## 📊 Results
 
-- Density-matrix-based simulation.
-- Investigation of different attack scenarios.
-- Evaluation under different noise conditions.
-- Comparison of two-arm attacks with a Bob-only attack control.
+### Q1 · Noiseless: QCL and Q-BAC land exactly on PCCM
 
-These experiments help investigate how noise and access to both quantum channels influence the information–disturbance trade-off.
+<p align="center">
+  <img src="images/q1_noiseless_vs_pccm.png" alt="Noiseless BBM92: QCL and Q-BAC vs PCCM" width="850">
+</p>
 
-## 🛠️ Technologies Used
+- **10 / 10** target fidelities where QCL and Q-BAC match PCCM.
+- **5.6 × 10⁻¹⁶** maximum loss gap between PCCM and the Fuchs–Peres bound.
+- No gain without noise, as in the mother paper, so the setup is validated.
 
-- **Python** – Main programming language.
-- **NumPy** – Numerical operations and validation.
-- **SciPy** – Numerical optimization.
-- **Pandas** – Experimental data handling and analysis.
+### Q2 · Under noise, both learned attacks beat PCCM
 
-## 🔍 Research Scope
+<p align="center">
+  <img src="images/q2_gain_heatmap.png" alt="Max gain over PCCM heatmap for QCL and Q-BAC" width="850">
+</p>
 
-The main research question is whether learnable quantum attack architectures can provide an advantage over established cloning approaches when Eve has access to both arms of an entangled BBM92 system.
+*Max gain over PCCM (over 5 target fidelities), 10 noise scenarios × 3 strengths.*
 
-The study evaluates the performance of Q-BAC and QCL against PCCM across different attack configurations and noise conditions.
+- Gain in **all 30** noise conditions.
+- Largest gain: **AB3** (Bob amplitude damping before Eve), Q-BAC **0.403** and QCL **0.391** at strength 0.1.
+- Q-BAC is ahead of QCL in **AB3, EV1 and EV2**.
+- Against PCCM with the same trained readout, the gain barely changes, so the advantage comes from the circuit, not the readout.
 
-The results are analyzed comparatively, without assuming that a learnable architecture is universally superior to the reference benchmark.
+### Eve's Z/X fidelity imbalance
 
+<p align="center">
+  <img src="images/eve_basis_imbalance.png" alt="Basis imbalance of Eve's fidelity across PCCM, QCL and Q-BAC" width="900">
+</p>
 
+- **AB5** is where the learned circuits are clearly more imbalanced than PCCM (up to about 0.37 at strength 0.3).
+- In **AB1, AB4 and EV4** the learned circuits are *less* imbalanced than PCCM yet still gain, so more imbalance is not the whole story.
 
+### Q3 · Q-BAC vs QCL: same ceiling, better reliability
+
+<p align="center">
+  <img src="images/q3_symmetry_and_reliability.png" alt="Symmetry penalty effect and Q-BAC reliability" width="900">
+</p>
+
+- **Gain:** identical in 7 of 10 scenarios; Q-BAC leads in AB3, EV1 and EV2. Over 50 (scenario, target) rows: **14 wins, 35 ties, 1 loss**; mean difference **+0.007** (95% CI 0.003 to 0.013).
+- **Reliability:** share of random restarts that reach the best loss is **0.41 for Q-BAC vs 0.31 for QCL**. Q-BAC's hit rate is higher in 27–30 of 30 cells at every penalty weight (Wilcoxon p ≤ 0.001).
+
+### Q4 · Where does the gain come from? Imbalance, plus the second arm
+
+<p align="center">
+  <img src="images/q4_mechanism_free_vs_symmetric.png" alt="Gain over PCCM, free vs forced symmetric, two arms vs Bob-only" width="850">
+</p>
+
+- **Bob-only control (BB84-equivalent):** the gain in AB1, AB2, AB4 and AB5 vanishes under forced symmetry, reproducing the mother paper's mechanism.
+- **Two arms:** the gain survives in **8 of 10** scenarios (Q-BAC); only AB2 and AB5 collapse.
+- Adding the second arm raises the gain by **+0.07** (AB1, AB4), **+0.04** (AB6) and **+0.12** (EV1).
+
+### Which arm does the work?
+
+<p align="center">
+  <img src="images/which_arm_does_the_work.png" alt="Bob fidelity cost and Eve fidelity gain from each arm's block" width="900">
+</p>
+
+- Green = Alice's arm (A); orange = Bob's arm (B).
+- Top row: Bob's fidelity cost of each arm's block alone. Bottom row: Eve's fidelity gained from each arm's block alone.
+- PCCM relies almost entirely on Bob's arm, while **QCL and Q-BAC use both arms**.
+
+### Q5 · Symmetry penalty: why we add it and what it shows
+
+- **Why:** if the gain were only imbalance, removing the imbalance must kill it. The penalty is the intervention that tests this.
+- Bob-side imbalance is what Alice and Bob can check, so penalizing it is physically meaningful.
+- Penalized PCCM cannot meet the constraint; the learned attacks beat it by **0.13 to 0.68**.
+
+---
+
+## 🏆 Contributions
+
+1. Extension of QCL-style attacks to an entanglement-based protocol with Eve on both arms, validated against Fuchs–Peres and PCCM.
+2. A 30-condition noise benchmark including Eve-side noise, with ceiling checks (arm-local vs joint).
+3. A causal test of the gain mechanism: it is partly imbalance, as in the mother paper, but survives forced symmetry in 8 of 10 two-arm scenarios.
+4. Q-BAC does not raise the ceiling; it is the more reliable optimizer and retains more gain under symmetry (**96% vs 87%**).
+
+---
+
+## ⚠️ Limitations and Next Steps
+
+- Individual attacks, arm-local blocks, simulation only.
+- A joint (four-qubit) attack was tested at a single point (p = 0.2, f = 0.75). It beats the local ceiling in most scenarios (by up to 0.08), so a full joint benchmark remains open.
+- The second-arm effect is shown by comparison with the Bob-only control; an entanglement-based mechanism analysis would make it conclusive.
+- The Q-BAC advantage is small and limited to three scenarios.
+- **Next:** other protocols (six-state, E91 with a Bell constraint).
+
+---
