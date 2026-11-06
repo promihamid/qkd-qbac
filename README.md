@@ -241,14 +241,5 @@ The optimization aims to:
 3. A causal test of the gain mechanism: it is partly imbalance, as in the mother paper, but survives forced symmetry in 8 of 10 two-arm scenarios.
 4. Q-BAC does not raise the ceiling; it is the more reliable optimizer and retains more gain under symmetry (**96% vs 87%**).
 
----
-
-##  Limitations and Next Steps
-
-- Individual attacks, arm-local blocks, simulation only.
-- A joint (four-qubit) attack was tested at a single point (p = 0.2, f = 0.75). It beats the local ceiling in most scenarios (by up to 0.08), so a full joint benchmark remains open.
-- The second-arm effect is shown by comparison with the Bob-only control; an entanglement-based mechanism analysis would make it conclusive.
-- The Q-BAC advantage is small and limited to three scenarios.
-- **Next:** other protocols (six-state, E91 with a Bell constraint).
 
 ---
