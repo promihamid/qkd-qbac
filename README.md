@@ -165,7 +165,7 @@ The optimization aims to:
 
 ## 📊 Results
 
-### Q1 · Noiseless: QCL and Q-BAC land exactly on PCCM
+### Noiseless: QCL and Q-BAC land exactly on PCCM
 
 <p align="center">
   <img src="images/q1_noiseless_vs_pccm.png" alt="Noiseless BBM92: QCL and Q-BAC vs PCCM" width="850">
@@ -175,7 +175,7 @@ The optimization aims to:
 - **5.6 × 10⁻¹⁶** maximum loss gap between PCCM and the Fuchs–Peres bound.
 - No gain without noise, as in the mother paper, so the setup is validated.
 
-### Q2 · Under noise, both learned attacks beat PCCM
+### Under noise, both learned attacks beat PCCM
 
 <p align="center">
   <img src="images/q2_gain_heatmap.png" alt="Max gain over PCCM heatmap for QCL and Q-BAC" width="850">
@@ -197,7 +197,7 @@ The optimization aims to:
 - **AB5** is where the learned circuits are clearly more imbalanced than PCCM (up to about 0.37 at strength 0.3).
 - In **AB1, AB4 and EV4** the learned circuits are *less* imbalanced than PCCM yet still gain, so more imbalance is not the whole story.
 
-### Q3 · Q-BAC vs QCL: same ceiling, better reliability
+### Q-BAC vs QCL: same ceiling, better reliability
 
 <p align="center">
   <img src="images/q3_symmetry_and_reliability.png" alt="Symmetry penalty effect and Q-BAC reliability" width="900">
@@ -206,7 +206,7 @@ The optimization aims to:
 - **Gain:** identical in 7 of 10 scenarios; Q-BAC leads in AB3, EV1 and EV2. Over 50 (scenario, target) rows: **14 wins, 35 ties, 1 loss**; mean difference **+0.007** (95% CI 0.003 to 0.013).
 - **Reliability:** share of random restarts that reach the best loss is **0.41 for Q-BAC vs 0.31 for QCL**. Q-BAC's hit rate is higher in 27–30 of 30 cells at every penalty weight (Wilcoxon p ≤ 0.001).
 
-### Q4 · Where does the gain come from? Imbalance, plus the second arm
+### Where does the gain come from? Imbalance, plus the second arm
 
 <p align="center">
   <img src="images/q4_mechanism_free_vs_symmetric.png" alt="Gain over PCCM, free vs forced symmetric, two arms vs Bob-only" width="850">
@@ -226,7 +226,7 @@ The optimization aims to:
 - Top row: Bob's fidelity cost of each arm's block alone. Bottom row: Eve's fidelity gained from each arm's block alone.
 - PCCM relies almost entirely on Bob's arm, while **QCL and Q-BAC use both arms**.
 
-### Q5 · Symmetry penalty: why we add it and what it shows
+### Symmetry penalty: why we add it and what it shows
 
 - **Why:** if the gain were only imbalance, removing the imbalance must kill it. The penalty is the intervention that tests this.
 - Bob-side imbalance is what Alice and Bob can check, so penalizing it is physically meaningful.
