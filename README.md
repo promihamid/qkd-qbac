@@ -77,6 +77,9 @@ The circuit includes:
 - RX, RY, and RZ rotation gates.
 - CNOT gates for entangling operations.
 - Trainable circuit parameters.
+<p align="center">
+  <img src="images/bbm92_qcl_attack_circuit.png" alt="BBM92 QCL Attack Circuit" width="900">
+</p>
 
 ### 3. Quantum-Based Attack Circuit (Q-BAC)
 
@@ -90,6 +93,9 @@ The architecture uses:
 - CNOT gates for entangling operations.
 
 The performance of Q-BAC is compared with PCCM and QCL under different experimental conditions.
+<p align="center">
+  <img src="images/bbm92_qbac_attack_circuit.png" alt="BBM92 Q-BAC Attack Circuit" width="900">
+</p>
 
 ## 📊 Evaluation Metrics
 
